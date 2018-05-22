@@ -8,6 +8,7 @@ const schema = buildSchema(`
   type Query {
     user: String
     items: [Item]
+    itemByName(name: String!): Item
   }
   
   type Item {
@@ -23,7 +24,10 @@ const items = [
 
 const rootValue = {
   user: () => 'GraphQL',
-  items: () => items
+  items: () => items,
+  itemByName: ({name}) => {
+    return items.find(item => item.name === name)
+  }
 }
 
 const app = express()

@@ -6,7 +6,15 @@
         <li v-for="(item, i) in items" :key="i">{{item.name}}</li>
       </ul>
     </section>
-    <button @click="getItems">Request GET</button>
+    <button @click="getItems">GET Items</button>
+    <hr>
+    <section>Data:
+      <ul class="items" v-if="item">
+        <li>Name:{{item.name}}</li>
+        <li>Power:{{item.power}}</li>
+      </ul>
+    </section>
+    <button @click="getItemsByName">GET Items By Name</button>
   </section>
 </template>
 
@@ -25,6 +33,7 @@ export default {
   name: 'Item',
   data () {
     return {
+      item: null,
       items: []
     }
   },
@@ -40,6 +49,26 @@ export default {
           }`
         })
         this.items = res.data.data.items
+      } catch (e) {
+        console.log('error', e)
+      }
+    },
+    async getItemsByName () {
+      try {
+        const requestURI = 'http://localhost:3000/graphql'
+        const res = await axios.post(requestURI, {
+          query: `
+            query GetItemsByName($itemName: String!) {
+              itemByName(name: $itemName) {
+                name
+                power
+              }
+            }`,
+          variables: {
+            itemName: '白蓮華'
+          }
+        })
+        this.item = res.data.data.itemByName
       } catch (e) {
         console.log('error', e)
       }

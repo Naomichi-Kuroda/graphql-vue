@@ -4,7 +4,7 @@
     <section>
       <p>Data: {{user}}</p>
     </section>
-    <button @click="getUser">Request GET</button>
+    <button @click="getUser">GET User</button>
   </section>
 </template>
 
