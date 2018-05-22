@@ -1,10 +1,10 @@
 <template>
   <section class="user">
     <h1>User</h1>
-    <pre>
-      Data: {{user}}
-    </pre>
-    <button @click="getUser">Request</button>
+    <section>
+      <p>Data: {{user}}</p>
+    </section>
+    <button @click="getUser">Request GET</button>
   </section>
 </template>
 
