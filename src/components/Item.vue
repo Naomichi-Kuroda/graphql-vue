@@ -14,7 +14,8 @@
         <li>Power:{{item.power}}</li>
       </ul>
     </section>
-    <button @click="getItemsByName">GET Items By Name</button>
+    <input type="text" v-model="itemName">
+    <button @click="getItemsByName">GET Item By Name</button>
   </section>
 </template>
 
@@ -33,6 +34,7 @@ export default {
   name: 'Item',
   data () {
     return {
+      itemName: null,
       item: null,
       items: []
     }
@@ -65,7 +67,7 @@ export default {
               }
             }`,
           variables: {
-            itemName: '白蓮華'
+            itemName: this.itemName
           }
         })
         this.item = res.data.data.itemByName
