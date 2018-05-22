@@ -2,20 +2,25 @@
   <section class="item">
     <h1>Item</h1>
     <section>Data:
-      <ul class="items">
-        <li v-for="(item, i) in items" :key="i">{{item.name}}</li>
+      <ul class="items" v-for="(item, i) in items" :key="i">
+        <li>Name: {{item.name}}</li>
+        <li>Power: {{item.power}}</li>
       </ul>
     </section>
     <button @click="getItems">GET Items</button>
     <hr>
     <section>Data:
       <ul class="items" v-if="item">
-        <li>Name:{{item.name}}</li>
-        <li>Power:{{item.power}}</li>
+        <li>Name: {{item.name}}</li>
+        <li>Power: {{item.power}}</li>
       </ul>
     </section>
     <input type="text" v-model="itemName">
     <button @click="getItemsByName">GET Item By Name</button>
+    <template v-if="item">
+      <input type="text" v-model="itemPower">
+      <button @click="updatePower">UPDATE Item's Power</button>
+    </template>
   </section>
 </template>
 
@@ -34,9 +39,10 @@ export default {
   name: 'Item',
   data () {
     return {
-      itemName: null,
+      items: [],
       item: null,
-      items: []
+      itemName: null,
+      itemPower: null
     }
   },
   methods: {
@@ -47,6 +53,7 @@ export default {
           query: `{
             items {
               name
+              power
             }
           }`
         })
@@ -71,6 +78,30 @@ export default {
           }
         })
         this.item = res.data.data.itemByName
+      } catch (e) {
+        console.log('error', e)
+      }
+    },
+    async updatePower () {
+      try {
+        const requestURI = 'http://localhost:3000/graphql'
+        const res = await axios.post(requestURI, {
+          query: `
+            mutation UpdatePower(
+              $itemName: String!, $itemPower: Float
+            ) {
+                updatePower(name: $itemName, power: $itemPower)
+              {
+                name
+                power
+              }
+            }`,
+          variables: {
+            itemName: this.itemName,
+            itemPower: this.itemPower
+          }
+        })
+        this.item = res.data.data.updatePower
       } catch (e) {
         console.log('error', e)
       }

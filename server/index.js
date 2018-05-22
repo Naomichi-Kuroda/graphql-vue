@@ -11,6 +11,10 @@ const schema = buildSchema(`
     itemByName(name: String!): Item
   }
   
+  type Mutation {
+    updatePower(name: String!, power: Float): Item
+  }
+
   type Item {
     name: String
     power: Float
@@ -27,6 +31,11 @@ const rootValue = {
   items: () => items,
   itemByName: ({name}) => {
     return items.find(item => item.name === name)
+  },
+  updatePower: ({name, power}) => {
+    const item = items.find(item => item.name === name)
+    item.power = power
+    return item
   }
 }
 
